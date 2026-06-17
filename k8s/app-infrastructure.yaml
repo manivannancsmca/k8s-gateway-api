@@ -28,3 +28,16 @@ spec:
             memory: "512Mi"
             cpu: "500m"
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-demo-service
+spec:
+  selector:
+    app: gateway-demo
+  ports:
+  - protocol: TCP
+    port: 8086       # 2. சர்வீஸ் வெளியில் காட்டும் போர்ட் (சரி)
+    targetPort: 8086 # 3. பாட்-க்குள் இருக்கும் கன்டெய்னர் போர்ட் (சரி)
+  type: ClusterIP
+---
