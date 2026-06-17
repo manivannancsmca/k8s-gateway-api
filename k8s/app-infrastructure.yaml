@@ -41,3 +41,10 @@ spec:
     targetPort: 8086 # 3. பாட்-க்குள் இருக்கும் கன்டெய்னர் போர்ட் (சரி)
   type: ClusterIP
 ---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: eg
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
