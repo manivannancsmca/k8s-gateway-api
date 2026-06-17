@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-demo-deployment
+  labels:
+    app: gateway-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gateway-demo
+  template:
+    metadata:
+      labels:
+        app: gateway-demo
+    spec:
+      containers:
+      - name: gateway-demo
+        image: k8s-gateway-api:1.0.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8086 # 1. கன்டெய்னர் 8086ல் இயங்குகிறது (சரி)
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
