@@ -63,6 +63,7 @@ wsl --install -d Ubuntu
 # Verify installation
 wsl -l -v
 
+---
 
 📦 Installation Guide
 Step 1: Clone the Repository
@@ -86,6 +87,7 @@ Complete the installation and restart if prompted
 
 Post-Installation Configuration
 
+---
 
 # Open Docker Desktop
 # Go to Settings > Resources > WSL Integration
@@ -96,6 +98,7 @@ Post-Installation Configuration
 docker --version
 docker ps
 
+---
 
 Step 3: Install Kubernetes CLI Tools
 Using Windows Package Manager (winget)
@@ -116,6 +119,8 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocola
 # Install tools
 choco install kind kubernetes-cli -y
 
+---
+
 Step 4: Verify Installations
 
 # Check all installations
@@ -125,6 +130,7 @@ kubectl version --client # kubectl version
 java -version            # Java version
 mvn -version            # Maven version
 
+---
 
 📁 Project Structure
 
@@ -169,6 +175,7 @@ gateway-demo/
 ├── 📄 CHANGELOG.md              # Version history
 └── 📄 README.md                 # This file
 
+---
 
 Build the Application
 
@@ -186,6 +193,8 @@ mvn spring-boot:run
 
 # Verify the JAR
 ls -la target/gateway-demo-*.jar
+
+---
 
 Build the Docker Image
 
@@ -208,6 +217,8 @@ docker rm gateway-demo-container
 # Scan for vulnerabilities
 docker scan gateway-demo:1.0.0
 
+
+---
 
 ☸️ Kubernetes Cluster Setup
 Kind Cluster Configuration
@@ -269,7 +280,7 @@ kubectl get pods -A
 # Get cluster info
 kubectl version
 
-
+---
 
 Load Application Image
 
@@ -282,6 +293,7 @@ kubectl get nodes -o jsonpath='{.items[*].status.images}' | jq .
 # Check if image exists on nodes
 kubectl get nodes -o yaml | grep -A5 gateway-demo
 
+---
 
 🌐 Gateway API Installation
 
@@ -297,6 +309,7 @@ kubectl get crds | grep gateway.networking.k8s.io
 kubectl describe crd gateways.gateway.networking.k8s.io
 kubectl describe crd httproutes.gateway.networking.k8s.io
 
+---
 
 Step 2: Install Envoy Gateway Controller
 
@@ -315,6 +328,7 @@ kubectl logs -n envoy-gateway-system deployment/envoy-gateway
 # Check services
 kubectl get svc -n envoy-gateway-system
 
+---
 
 Expected Output:
 NAME                                READY   STATUS    RESTARTS   AGE
@@ -322,6 +336,7 @@ envoy-gateway-xxxxx-yyyyy           1/1     Running   0          2m
 envoy-gateway-xxxxx-zzzzz           1/1     Running   0          2m
 
 
+---
 
 🔀 Traffic Routing Configuration
 Complete Application Infrastructure
@@ -515,6 +530,7 @@ spec:
           %UPSTREAM_CLUSTER%
 
 
+---
 
 Horizontal Pod Autoscaling (Optional)
 
@@ -559,6 +575,7 @@ spec:
         value: 100
         periodSeconds: 15
 
+---
 
 Apply the Configuration
 
@@ -581,6 +598,7 @@ kubectl get hpa
 kubectl describe gateway my-gateway
 kubectl describe httproute demo-route
 
+---
 
 🧪 Testing & Verification
 Step 1: Check Resource Status
@@ -607,6 +625,7 @@ kubectl port-forward deployment/demo-app 8080:8080
 curl http://localhost:8080/api/v1/status
 
 
+---
 
 Step 2: Port Forward to Envoy Proxy
 
@@ -623,7 +642,7 @@ kubectl port-forward service/envoy-default-my-gateway-xxxxxxx -n envoy-gateway-s
 # Alternative: Port forward to specific port
 kubectl port-forward service/envoy-default-my-gateway-xxxxxxx -n envoy-gateway-system 8080:80
 
-
+---
 
 Step 3: Test the Endpoint
 
@@ -642,6 +661,7 @@ Invoke-WebRequest -Uri http://localhost/api/v1/status -Verbose
 # Open in browser
 start http://localhost/api/v1/status
 
+---
 
 Expected Response:
 {
@@ -652,6 +672,7 @@ Expected Response:
   "uptime": 123456789
 }
 
+---
 
 Step 4: Load Testing
 
@@ -670,5 +691,3 @@ hey -n 1000 -c 20 -H "X-Custom-Header: test" http://localhost/api/v1/status
 
 # Check response times
 hey -n 1000 -c 10 -o csv http://localhost/api/v1/status > results.csv
-
-
